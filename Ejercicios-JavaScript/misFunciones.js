@@ -8,8 +8,8 @@
 convertirUnidades = (id, valor) => {
     let metros, pulgadas, pie, yardas;
 
-    if(valor.includes(",")){
-        valor = valor.replace(",","."); //Cambia la "," por un "."
+    if (valor.includes(",")) {
+        valor = valor.replace(",", "."); //Cambia la "," por un "."
     }
 
     if (isNaN(valor)) {
@@ -40,7 +40,7 @@ convertirUnidades = (id, valor) => {
         pie = valor * 3;
     }
     document.LasUNidades.unid_metro.value = metros;
-    document.LasUNidades.unid_pie.value = Math.round(pie*100)/100; //Redondea a 2 cifras decimales
+    document.LasUNidades.unid_pie.value = Math.round(pie * 100) / 100; //Redondea a 2 cifras decimales
     document.LasUNidades.unid_yarda.value = yardas.toFixed(2); //Funciona solo con números
     document.LasUNidades.unid_pulgada.value = Number(pulgadas).toFixed(2); //En caso de que sea un string
 }
@@ -55,13 +55,13 @@ convertirGR = (id) => {
 
     if (id == "grados") {
         gr = document.getElementById("grados").value;
-        if(isNaN(gr)){
+        if (isNaN(gr)) {
             gr = "";
         }
         document.getElementById("radianes").value = (gr * Math.PI) / 180;
     } else if (id == "radianes") {
         rad = document.getElementById("radianes").value;
-        if(isNaN(rad)){
+        if (isNaN(rad)) {
             rad = "";
         }
         document.getElementById("grados").value = (rad * 180) / Math.PI;
@@ -74,9 +74,9 @@ convertirGR = (id) => {
  * @param {string} id - id del elemento input del html
  */
 let mostrar_ocultar = (id) => {
-    if(id==="mostrarDiv"){
+    if (id === "mostrarDiv") {
         document.getElementsByName("unDiv")[0].style.display = 'block';
-    }else{
+    } else {
         document.getElementsByName("unDiv")[0].style.display = 'none';
     }
 }
@@ -86,13 +86,13 @@ let mostrar_ocultar = (id) => {
  * Suma dos elementos
  * @method sumar
  */
-let sumar = () =>{
+let sumar = () => {
     //Verificacion de letras
     let resultado, num1, num2;
     num1 = Number(document.operacionesMat.sum_num1.value)
     num2 = Number(document.operacionesMat.sum_num2.value)
 
-    resultado = num1 + num2 ;
+    resultado = num1 + num2;
     document.getElementById("totalS").innerHTML = resultado;
     document.operacionesMat.sum_total.value = resultado;
     //Completar los siguientes campos
@@ -134,7 +134,7 @@ let cargarLS = () => {
     document.getElementById("dist").value = `${distancia} ${unidad}`;
 }
 
-let dibujarCirculoCuadrado = () =>{
+let dibujarCirculoCuadrado = () => {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -143,19 +143,19 @@ let dibujarCirculoCuadrado = () =>{
 
     // R e c t á n g u l o
     let margen = 5;
-    ctx.fillRect(50+margen, yMax-100-margen, 20, 20);
+    ctx.fillRect(50 + margen, yMax - 100 - margen, 20, 20);
     ctx.strokeStyle
 
 
     // C í r c u l o
     ctx.strokeStyle = "#20ffff";
     ctx.fillStyle = "#ff9b31";
-    ctx.arc(xMax/2, yMax/2, 100, 0, 2 * Math.PI);
+    ctx.arc(xMax / 2, yMax / 2, 100, 0, 2 * Math.PI);
     ctx.stroke(); // Lineas
     ctx.fill(); // Relleno
 }
 
-let limparCanvas = () =>{
+let limparCanvas = () => {
     let canvas = document.getElementById("myCanvas");
     canvas.width = canvas.width;
 }
@@ -167,12 +167,121 @@ let dibujar = () => {
     let posX = event.clientX;
     let posY = event.clientY;
 
-    canvas.onmousedown = function (){bandera=true};
-    canvas.onmouseup = function (){bandera=false};
+    canvas.onmousedown = function () {
+        bandera = true
+    };
+    canvas.onmouseup = function () {
+        bandera = false
+    };
 
     if (bandera) {
         ctx.fillRect(0 + posX, 0 + posY, 15, 15);
         ctx.fill();
         ctx.fillStyle = "#71d9d9";
+    }
+}
+
+let dibujarCuadriculado = () => {
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const anchoMax = canvas.width;
+    const alturaMax = canvas.height;
+    const paso = 20;
+    let ejeX = -25;
+    let ejeY = -15;
+
+    //Lineas Verticales
+    for (let i = paso; i < anchoMax; i += paso) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, alturaMax);
+        ctx.strokeStyle = "#c754ad";
+        ctx.stroke();
+        ctx.font="10px Arial";
+        ctx.fillStyle="#000000"
+        ejeX++;
+        ctx.fillText(ejeX, i, alturaMax/2);
+        ctx.closePath();
+    }
+    //Lineas Horizontales
+    for (let i = paso; i < alturaMax; i += paso) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(anchoMax, i);
+        ctx.strokeStyle = "#c754ad";
+        ctx.stroke();
+        ctx.font="10px Arial";
+        ctx.fillStyle="#000000"
+        ejeY++;
+        ctx.fillText(ejeY,anchoMax/2, i);
+        ctx.closePath();
+    }
+    //Eje X
+    ctx.beginPath();
+    ctx.moveTo(0, alturaMax / 2);
+    ctx.lineTo(anchoMax, alturaMax / 2);
+    ctx.strokeStyle = "#4501ff";
+    ctx.stroke();
+    ctx.closePath();
+    //Eje Y
+    ctx.beginPath();
+    ctx.moveTo(anchoMax / 2, 0);
+    ctx.lineTo(anchoMax / 2, alturaMax);
+    ctx.strokeStyle = "#4501ff";
+    ctx.stroke();
+    ctx.closePath();
+}
+
+let dibujarImagen = (posX, posY) => {
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d")
+
+    const anchoMax = canvas.width;
+    const alturaMax = canvas.height;
+
+    //Limpia lienzo
+    canvas.width = canvas.width;
+
+    console.log(posX, posY);
+    let img = new Image();
+    img.src = "images/auto.png";
+
+    if (posX < 0 || posY < 0 || posX >= anchoMax || posY >= alturaMax) {
+        openDialog();
+    } else {
+        img.onload = function () {
+            ctx.drawImage(img, posX, posY);
+        }
+    }
+}
+
+let cerrarDialog = () => {
+    const dialog = document.getElementById("myDialog");
+    dialog.close();
+}
+
+let openDialog = () => {
+        const dialog = document.getElementById("myDialog");
+        dialog.showModal();
+}
+
+var x = -200;
+var dx = 2;
+let animarAuto = () => {
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let img = new Image();
+    img.src = "images/auto.png";
+
+    img.onload = function (){
+        canvas.width = canvas.width;
+        ctx.drawImage(img,x,100);
+    }
+    x += dx;
+    console.log("La coordenada X es: "+x);
+    if(x>canvas.width){
+        x = -200;
     }
 }
