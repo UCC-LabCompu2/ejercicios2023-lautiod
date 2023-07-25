@@ -266,7 +266,7 @@ let openDialog = () => {
         dialog.showModal();
 }
 
-var x = -200;
+var x = 100;
 var dx = 2;
 let animarAuto = () => {
     const canvas = document.getElementById("myCanvas");
